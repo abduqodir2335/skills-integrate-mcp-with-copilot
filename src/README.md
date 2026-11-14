@@ -27,25 +27,17 @@ A super simple FastAPI application that allows students to view and sign up for 
    - API documentation: http://localhost:8000/docs
    - Alternative documentation: http://localhost:8000/redoc
 
-4. Configure teacher accounts in `teachers.json`. Store password hashes, not
-   plaintext passwords. Generate a salt and PBKDF2-HMAC-SHA256 hash for each
-   teacher with Python:
+4. Configure teacher accounts in `src/teachers.json` by running this command
+   from the repository root:
 
    ```python
-   import hashlib
-   import secrets
-
-   password = input("Teacher password: ")
-   salt = secrets.token_bytes(16)
-   password_hash = hashlib.pbkdf2_hmac(
-       "sha256", password.encode("utf-8"), salt, 600_000
-   ).hex()
-   print({"salt": salt.hex(), "password_hash": password_hash})
+   python src/create_teacher.py
    ```
 
-   Add each printed record to `teachers.json` under the teacher's username.
-   Set `SESSION_SECRET` to a stable, private random value before deployment.
-   Set `COOKIE_SECURE=true` when serving the site over HTTPS.
+   The command prompts for a username and password (without displaying the
+   password) and stores only a salted PBKDF2-HMAC-SHA256 hash. Keep the
+   credentials file private. Set `SESSION_SECRET` to a stable, private random
+   value before deployment and `COOKIE_SECURE=true` when serving over HTTPS.
 
 ## API Endpoints
 
